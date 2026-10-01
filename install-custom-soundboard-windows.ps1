@@ -539,10 +539,14 @@ function Test-CommandSuccess {
     )
 
     Push-Location -LiteralPath $WorkingDirectory
+    $previousErrorActionPreference = $ErrorActionPreference
     try {
+        $ErrorActionPreference = "Continue"
         & $Executable @Arguments *> $null
-        return $LASTEXITCODE -eq 0
+        $exitCode = $LASTEXITCODE
+        return $exitCode -eq 0
     } finally {
+        $ErrorActionPreference = $previousErrorActionPreference
         Pop-Location
     }
 }
